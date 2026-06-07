@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROJECT_DIR="$(pwd)"
+OUTDIR="$PROJECT_DIR/outputs"
+OUT="$OUTDIR/informe.pdf"
+
+if [[ -x "$PROJECT_DIR/.venv/bin/python" ]]; then
+  PYTHON="$PROJECT_DIR/.venv/bin/python"
+elif command -v python3 >/dev/null 2>&1; then
+  PYTHON="python3"
+else
+  echo "ERROR: no se encontro python3." >&2
+  exit 1
+fi
+
+if [[ ! -f "$PROJECT_DIR/informe.py" ]]; then
+  echo "ERROR: no se encontro informe.py en $PROJECT_DIR." >&2
+  echo "Entra a la carpeta del proyecto y volve a ejecutar: runpy" >&2
+  exit 1
+fi
+
+mkdir -p "$OUTDIR"
+echo "Generando PDF en: $OUT"
+
+PYTHONPATH="$PROJECT_DIR" "$PYTHON" -m runpy informe
+
+if command -v xdg-open >/dev/null 2>&1; then
+  xdg-open "$OUT" >/dev/null 2>&1 || true
+fi
+
+echo "Hecho. PDF: $OUT"
