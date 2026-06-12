@@ -1,4 +1,5 @@
 from pathlib import Path
+import webbrowser
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
@@ -383,3 +384,4 @@ if __name__ == "__main__":
     output_dir.mkdir(exist_ok=True)
     output = output_dir / "informe.pdf"
     build_pdf(DATA, str(output))
+    webbrowser.open(output.resolve().as_uri())
